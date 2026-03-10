@@ -5,7 +5,6 @@ const Footer = () => {
         &lt;<span className='text-white'>Pass</span>Word/&gt;
       </div>
       <div className='flex justify-center items-center gap-2'>Created with <img className='h-5' src="/heart.svg" alt="logo"/>by Mahi Kumar</div>
-      
     </footer>
   )
 }

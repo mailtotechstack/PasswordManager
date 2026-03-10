@@ -3,6 +3,7 @@ import { useDetails } from "../context/context";
 
 export default function Form() {
   const {details, setDetails} = useDetails();
+  const [isHover, setIsHover] = useState(false);
 
   const [detail, setDetail] = useState({
     site: "",
@@ -57,19 +58,21 @@ export default function Form() {
           className="border h-10 w-full rounded-full border-green-400 ps-5"
           type="text"
         />
-        <span className="md:w-1/3 w-full rounded-full inline-block h-10">
+        <span tabIndex={0} className="ps-5 mt-5 md:mt-0 outline outline-green-400  focus-within:outline-black focus-within:outline-2 flex items-center md:w-1/3 w-full rounded-full h-10">
           <input
             value={detail.password}
             name="password"
             onChange={handleInput}
             placeholder="Enter Password"
-            className="rounded-full border border-green-400 ps-5 mt-5 md:mt-0 focus:border-black w-full h-full"
+            className=" w-full h-full outline-none"
             type="text"
           />
+          <img className="h-5 px-5 cursor-pointer" src="/invisible.png"  alt="" />
         </span>
       </div>
-      <button className="border mx-auto rounded-full border-blue-900 w-fit px-5 py-1 active:font-bold bg-green-500">
-        Save
+      <button onMouseEnter={()=>setIsHover(true)} onMouseLeave={()=>setIsHover(false)} className="border flex items-center mx-auto rounded-full border-blue-900 px-5 py-1 active:font-bold bg-green-500">
+        <img className="h-5 me-1" src={isHover ? "/add.gif" : "/addStatic.svg"} alt="icon" />
+        <span>Save</span>
       </button>
     </form>
   );
