@@ -2,7 +2,9 @@ import { createContext, useContext } from "react";
 
 export const detailsContext = createContext({
     details:[],
-    setDetails: ()=>{}
+    setDetails: ()=>{},
+    detail: {},
+    setDetail: ()=>{}
 });
 
 export const DetailsProvider = detailsContext.Provider;

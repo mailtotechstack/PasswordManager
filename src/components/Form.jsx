@@ -2,14 +2,8 @@ import { useState } from "react";
 import { useDetails } from "../context/context";
 
 export default function Form() {
-  const {details, setDetails} = useDetails();
+  const {details, setDetails, detail, setDetail} = useDetails();
   const [isHover, setIsHover] = useState(false);
-
-  const [detail, setDetail] = useState({
-    site: "",
-    username: "",
-    password: "",
-  });
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -25,6 +19,12 @@ export default function Form() {
       password: "",
     });
     console.log(detail, details);
+  }
+
+  const [visible, setVisible] = useState(false);
+
+  function handleVisibility(){
+    setVisible(!visible);
   }
 
   function handleInput(e) {
@@ -65,9 +65,9 @@ export default function Form() {
             onChange={handleInput}
             placeholder="Enter Password"
             className=" w-full h-full outline-none"
-            type="text"
+            type={visible? "text": "password"}
           />
-          <img className="h-5 px-5 cursor-pointer" src="/invisible.png"  alt="" />
+          <img onClick={handleVisibility} className="h-5 px-5 cursor-pointer" src={!visible ? "/invisible.png" : "/visible.svg"}  alt="eye" />
         </span>
       </div>
       <button onMouseEnter={()=>setIsHover(true)} onMouseLeave={()=>setIsHover(false)} className="border flex items-center mx-auto rounded-full border-blue-900 px-5 py-1 active:font-bold bg-green-500">
