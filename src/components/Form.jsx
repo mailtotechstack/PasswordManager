@@ -42,6 +42,7 @@ export default function Form() {
       className="lg:w-2/3 md:mx-5 p-5 lg:mx-auto border flex flex-col gap-5"
     >
       <input
+        required
         value={detail.site}
         name="site"
         onChange={handleInput}
@@ -51,6 +52,7 @@ export default function Form() {
       />
       <div className="md:flex gap-5 ">
         <input
+          required
           value={detail.username}
           name="username"
           onChange={handleInput}
@@ -60,6 +62,7 @@ export default function Form() {
         />
         <span tabIndex={0} className="ps-5 mt-5 md:mt-0 outline outline-green-400  focus-within:outline-black focus-within:outline-2 flex items-center md:w-1/3 w-full rounded-full h-10">
           <input
+            required
             value={detail.password}
             name="password"
             onChange={handleInput}

@@ -1,0 +1,122 @@
+import { useState } from "react";
+import { useDetails } from "../context/context";
+
+// एक अलग कंपोनेंट ताकि हर Row की अपनी 'State' हो
+const PasswordRow = ({ detail, idx, onEdit, onDelete, onCopy }) => {
+    const [isHoverEdit, setIsHoverEdit] = useState(false);
+    const [isHoverDelete, setIsHoverDelete] = useState(false);
+    const [localCopy, setLocalCopy] = useState(false);
+
+    const handleLocalCopy = (text) => {
+        onCopy(text);
+        setLocalCopy(true);
+        setTimeout(() => setLocalCopy(false), 2000);
+    };
+
+    return (
+        <tr className="border text-center h-10 hover:bg-green-300 transition-colors">
+            <td className="break-all px-2">
+                <span>{detail.site}</span>
+                <img 
+                    onClick={() => handleLocalCopy(detail.site)} 
+                    className="h-5 px-2 inline-block cursor-pointer" 
+                    src={localCopy ? "/copy.gif" : "/copyStatic.svg"} 
+                    alt="copy"
+                />
+            </td>
+            <td className="border-x break-all px-2">
+                <span>{detail.username}</span>
+                <img 
+                    onClick={() => handleLocalCopy(detail.username)} 
+                    className="h-5 px-2 inline-block cursor-pointer" 
+                    src={localCopy ? "/copy.gif" : "/copyStatic.svg"} 
+                    alt="copy"
+                />
+            </td>
+            <td className="border-e break-all px-2">
+                {/* .repeat() का उपयोग करके पासवर्ड को छिपाना */}
+                <span>{"•".repeat(detail.password.length)}</span>
+                <img 
+                    onClick={() => handleLocalCopy(detail.password)} 
+                    className="h-5 px-2 inline-block cursor-pointer" 
+                    src={localCopy ? "/copy.gif" : "/copyStatic.svg"} 
+                    alt="copy"
+                />
+            </td>
+            <td className="py-2 w-16 flex justify-center items-center gap-2">
+                <img 
+                    onClick={() => onEdit(idx)} 
+                    onMouseEnter={() => setIsHoverEdit(true)} 
+                    onMouseLeave={() => setIsHoverEdit(false)} 
+                    className="h-5 cursor-pointer" 
+                    src={isHoverEdit ? "/edit.gif" : "/edit.svg"} 
+                    alt="edit" 
+                /> 
+                <img 
+                    onClick={() => onDelete(idx)} 
+                    onMouseEnter={() => setIsHoverDelete(true)} 
+                    onMouseLeave={() => setIsHoverDelete(false)} 
+                    className="h-5 cursor-pointer" 
+                    src={isHoverDelete ? "/delete.gif" : "/delete.svg"} 
+                    alt="delete" 
+                />
+            </td>
+        </tr>
+    );
+};
+
+export default function ListPassword() {
+    const { details, setDetails, setDetail } = useDetails();
+
+    const handleEdit = (idx) => {
+        setDetail(details[idx]);
+        handleDelete(idx); // पुराने को डिलीट करके एडिट मोड में लाना
+    };
+
+    const handleDelete = (idx) => {
+        setDetails((prev) => prev.filter((_, i) => idx !== i));
+    };
+
+    const handleCopy = async (text) => {
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch (err) {
+            console.error("Copy failed", err);
+        }
+    };
+
+    return (
+        <div className="py-5 bg-green-100 md:px-5 lg:w-2/3 lg:mx-auto my-5 rounded-lg shadow-md">
+            <h3 className="text-2xl font-bold mx-5 mb-4 text-green-900">My Passwords ({details.length})</h3>
+            
+            {details.length === 0 ? (
+                <p className="text-center py-10 text-green-700">अभी तक कोई पासवर्ड सेव नहीं किया गया है।</p>
+            ) : (
+                <div className="overflow-x-auto">
+                    <table className="w-full table-fixed border-collapse">
+                        <thead>
+                            <tr className="bg-green-800 text-white h-12">
+                                <th className="w-1/3">Website</th>
+                                <th className="border-x w-1/3">Username</th>
+                                <th className="border-e w-1/4">Password</th>
+                                <th className="w-20">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-green-200">
+                            {details.map((item, idx) => (
+                                <PasswordRow 
+                                    key={idx} 
+                                    detail={item} 
+                                    idx={idx} 
+                                    onEdit={handleEdit} 
+                                    onDelete={handleDelete} 
+                                    onCopy={handleCopy}
+                                />
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+    );
+}
